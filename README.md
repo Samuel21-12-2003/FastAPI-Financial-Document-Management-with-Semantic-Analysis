@@ -1,75 +1,74 @@
-# 📄 Financial Document AI (RAG-based Search System)
+# 📄 Financial Document AI
 
-## 🚀 Overview
-
-This project is an AI-powered **Financial Document Search System** built using **FastAPI, Qdrant, and HuggingFace embeddings**.
-
-It allows users to:
-
-* Upload financial documents (PDFs)
-* Convert them into structured vector embeddings
-* Perform **semantic search** (meaning-based search, not keyword-based)
-* Retrieve the most relevant document chunks using **RAG (Retrieval-Augmented Generation)**
+### 🔍 RAG-based Semantic Search System
 
 ---
 
-## 🧠 Key Features
+## 🚀 Overview
 
-* 📂 Document Upload & Processing
-* ✂️ Intelligent Text Chunking
-* 🔢 Embedding Generation using MiniLM
-* ⚡ Fast Vector Search using Qdrant
-* 🎯 Semantic Search (context-aware retrieval)
-* 🔄 Cross-Encoder Reranking for improved accuracy
-* 🔐 JWT-based Authentication system
+**Financial Document AI** is an AI-powered document intelligence system that enables users to upload financial documents and perform **semantic (meaning-based) search** using advanced NLP techniques.
+
+Unlike traditional keyword search, this system understands **context and intent**, providing more accurate and relevant results.
+
+---
+
+## ✨ Key Features
+
+* 📂 Upload and process financial documents (PDF)
+* ✂️ Automatic text chunking for large documents
+* 🔢 Embedding generation using **MiniLM (Sentence Transformers)**
+* ⚡ High-speed vector search using **Qdrant**
+* 🎯 Semantic search (context-aware retrieval)
+* 🔄 Cross-Encoder reranking for improved accuracy
+* 🔐 Secure authentication using JWT
 
 ---
 
 ## 🏗️ Tech Stack
 
-### Backend
+### 🔹 Backend
 
 * FastAPI
 * Uvicorn
 
-### Database
+### 🔹 Databases
 
-* PostgreSQL (via SQLAlchemy)
+* PostgreSQL (SQLAlchemy ORM)
 * Qdrant (Vector Database)
 
-### AI / ML
+### 🔹 AI / Machine Learning
 
 * HuggingFace Transformers
 * Sentence Transformers (MiniLM)
-* Cross-Encoder (MS MARCO model)
-* LangChain (for embeddings & chunking)
+* Cross-Encoder (MS MARCO)
+* LangChain (chunking + embeddings)
 
-### Others
+### 🔹 Utilities
 
 * PDFMiner (PDF text extraction)
-* Python-dotenv (environment variables)
+* Python-dotenv (environment management)
 
 ---
 
 ## 🔄 System Architecture
 
-### Document Processing Flow
+### 📥 Document Processing Pipeline
 
-1. User uploads a document
-2. Text is extracted from the file
-3. Document is split into smaller chunks
-4. Each chunk is converted into vector embeddings
-5. Embeddings are stored in Qdrant
+1. Upload document
+2. Extract text from PDF
+3. Split into smaller chunks
+4. Convert chunks into vector embeddings
+5. Store embeddings in Qdrant
 
 ---
 
-### Search Flow
+### 🔎 Search Pipeline
 
-1. User enters a query
+1. User submits query
 2. Query is converted into embedding
-3. Top similar chunks are retrieved from Qdrant
-4. Cross-Encoder reranks results for better relevance
-5. Top results are returned to the user
+3. Retrieve top similar chunks from Qdrant
+4. Apply Cross-Encoder reranking
+5. Return most relevant results
 
 ---
 
@@ -78,19 +77,19 @@ It allows users to:
 ```
 app/
 │
-├── main.py                # FastAPI entry point
-├── core/                 # Config and settings
-├── routes/               # API endpoints
-├── services/             # Business logic (RAG pipeline)
-├── models/               # Database models
-├── vector_db/            # Qdrant connection
+├── main.py              # FastAPI application entry point
+├── core/               # Configuration & environment settings
+├── routes/             # API route definitions
+├── services/           # Business logic (RAG pipeline)
+├── models/             # Database models
+├── vector_db/          # Qdrant client setup
 ```
 
 ---
 
 ## ⚙️ Installation & Setup
 
-### 1. Clone the repository
+### 1️⃣ Clone Repository
 
 ```
 git clone <your-repo-link>
@@ -99,21 +98,21 @@ cd Financial-Document-AI
 
 ---
 
-### 2. Create virtual environment
+### 2️⃣ Create Virtual Environment
 
 ```
 python -m venv .venv
 ```
 
-Activate:
+Activate (Windows):
 
 ```
-.venv\Scripts\activate   (Windows)
+.venv\Scripts\activate
 ```
 
 ---
 
-### 3. Install dependencies
+### 3️⃣ Install Dependencies
 
 ```
 pip install -r requirements.txt
@@ -121,7 +120,7 @@ pip install -r requirements.txt
 
 ---
 
-### 4. Run the server
+### 4️⃣ Run Application
 
 ```
 uvicorn app.main:app --reload
@@ -129,7 +128,7 @@ uvicorn app.main:app --reload
 
 ---
 
-### 5. Open API Docs
+### 5️⃣ Access API Docs
 
 ```
 http://127.0.0.1:8000/docs
@@ -140,52 +139,55 @@ http://127.0.0.1:8000/docs
 ## 🔐 Authentication
 
 * JWT-based authentication is implemented
-* Users must login to access document upload and search endpoints
+* Secure endpoints require user login
 
 ---
 
-## 📊 Example API Endpoints
+## 📊 API Endpoints
 
-* `POST /auth/login` → User login
-* `POST /documents/upload` → Upload document
-* `POST /rag/index-document` → Index document into vector DB
-* `POST /rag/search` → Perform semantic search
+| Method | Endpoint              | Description                   |
+| ------ | --------------------- | ----------------------------- |
+| POST   | `/auth/login`         | User login                    |
+| POST   | `/documents/upload`   | Upload document               |
+| POST   | `/rag/index-document` | Index document into vector DB |
+| POST   | `/rag/search`         | Perform semantic search       |
 
 ---
 
 ## 🎯 Why This Project?
 
-Traditional search relies on keywords.
-This system uses **semantic understanding**, allowing it to:
+Traditional search systems rely on exact keyword matching, which often leads to irrelevant results.
 
-* Understand user intent
-* Retrieve contextually relevant results
-* Improve accuracy using reranking
+This project solves that by:
 
----
-
-## 🚀 Future Improvements
-
-* Add LLM-based answer generation (ChatGPT-style responses)
-* Hybrid Search (BM25 + Vector Search)
-* Frontend dashboard (React)
-* Multi-document comparison
-* Role-based access control
+* Understanding semantic meaning
+* Improving retrieval accuracy
+* Enhancing user experience with intelligent search
 
 ---
 
-## 🧑‍💻 Author
+## 🚀 Future Enhancements
+
+* 🤖 LLM-based answer generation (ChatGPT-style responses)
+* 🔀 Hybrid search (BM25 + vector search)
+* 🌐 Frontend dashboard (React)
+* 📊 Multi-document comparison
+* 🔐 Role-based access control
+
+---
+
+## 👨‍💻 Author
 
 **Samuel Pallikonda**
 
 ---
 
-## ⭐ Final Note
+## ⭐ Key Highlights
 
-This project demonstrates a real-world implementation of:
+* Implements **Retrieval-Augmented Generation (RAG)**
+* Uses **Vector Database (Qdrant)** for scalable search
+* Combines **semantic search + reranking** for high accuracy
 
-* Retrieval-Augmented Generation (RAG)
-* Vector Databases
-* Semantic Search Systems
+---
 
-It is designed to solve practical problems in document intelligence and information retrieval.
+> 💡 This project demonstrates practical application of AI in document intelligence and real-world information retrieval systems.
