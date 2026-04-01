@@ -1,0 +1,16 @@
+fastapi[standard]
+sqlalchemy
+uvicorn
+python-jose[cryptography]
+bcrypt
+python-multipart
+pydantic-settings
+langchain
+langchain-community
+langchain-huggingface
+qdrant-client
+sentence-transformers
+pdfminer.six
+python-dotenv
+pg8000
+langchain-text-splitters
