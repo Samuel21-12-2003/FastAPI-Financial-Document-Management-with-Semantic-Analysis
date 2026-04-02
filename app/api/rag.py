@@ -64,7 +64,7 @@ def search(query_data: schemas.SearchQuery, current_user: models.User = Depends(
 def get_context(document_id: int, current_user: models.User = Depends(get_current_active_user)):
     results = rag_service.get_document_context(document_id)
     return {"document_id": document_id, "chunks": results}
-app.services import file_parser, rag_service
+from app.services import file_parser, rag_service
 import os
 
 router = APIRouter()

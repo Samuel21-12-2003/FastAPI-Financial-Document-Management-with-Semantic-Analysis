@@ -3,14 +3,10 @@ from qdrant_client.http import models as qdrant_models
 from app.core.config import settings
 import os
 
-# =========================
-# LOCAL QDRANT (BEST FOR DEV)
-# =========================
+
 qdrant_client = QdrantClient(path="./qdrant_data")
 
-# =========================
-# CREATE COLLECTION IF NOT EXISTS
-# =========================
+
 try:
     qdrant_client.get_collection(collection_name=settings.QDRANT_COLLECTION)
 except Exception:
