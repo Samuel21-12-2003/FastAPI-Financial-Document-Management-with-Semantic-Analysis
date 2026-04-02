@@ -1,0 +1,18 @@
+# Acme Corp - Annual Financial Report 2025
+
+## Executive Summary
+Acme Corp has experienced a year of aggressive expansion and mixed financial outcomes. The organization successfully captured 15% more market share in the North American logistics sector. However, this growth has come at the expense of a tightened balance sheet.
+
+## Q3 Revenue and Earnings
+During the third quarter (Q3), Acme Corp reported total revenue of $45.2 million, a 12% increase year-over-year. Net income for the quarter stood at $4.1 million. The primary driver for this growth was the successful launch of our automated supply chain services, which accounted for 40% of the quarter's total revenue.
+
+## Debt Obligations and Equity
+Total outstanding liabilities at the close of Q3 were $125 million, compared to $85 million in the previous fiscal year. Total shareholder equity is currently valued at $60 million.
+
+## Financial Risk and High Debt Ratio
+The most significant financial risk currently facing Acme Corp is related to our high debt ratio. Our debt-to-equity ratio currently stands at an alarming 2.08. This elevated leverage was necessitated by the $40 million acquisition of 'Global Freight Tech' in Q2. 
+
+If interest rates from the Federal Reserve increase by more than 50 basis points in the upcoming quarter, our debt servicing costs could increase by an estimated $1.2 million annually. This high debt ratio severely restricts our borrowing capacity for future emergency capital and poses a liquidity risk if Q4 revenue targets are not met.
+
+## Forward Outlook
+To mitigate the risks associated with the high debt ratio, the board has approved a pause on all new acquisitions for the next 18 months. Instead, leadership will focus exclusively on optimizing the profitability of the existing technological assets and reducing operating expenses by 8% across all departments.
