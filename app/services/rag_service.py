@@ -24,7 +24,7 @@ embeddings_model = HuggingFaceEmbeddings(
 try:
     cross_encoder = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 except Exception as e:
-    print(f"Warning: CrossEncoder failed to load ({e}). Falling back to vector search.")
+    print(f"Warning: CrossEncoder failed ({e}) → using vector search fallback")
     cross_encoder = None
 
 
@@ -42,10 +42,11 @@ text_splitter = RecursiveCharacterTextSplitter(
 # =========================
 def index_document_chunks(document_id: int, text: str, metadata: Dict[str, Any]):
     chunks = text_splitter.split_text(text)
-    points = []
+    print(f"Chunks created: {len(chunks)}")  # 🔍 DEBUG
 
     embeddings = embeddings_model.embed_documents(chunks)
 
+    points = []
     for i, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
         point_id = str(uuid.uuid4())
 
@@ -94,45 +95,42 @@ def remove_document_vectors(document_id: int):
 # =========================
 def semantic_search_with_reranking(query: str, top_k: int = 5) -> List[Dict[str, Any]]:
     query_vector = embeddings_model.embed_query(query)
-
-    # 🔥 FIX: Only use new Qdrant API
+  
     try:
+        # 🔥 FIX 1: Increase candidate pool
         res = qdrant_client.query_points(
             collection_name=settings.QDRANT_COLLECTION,
             query=query_vector,
-            limit=20
+            limit=50   # 🔥 VERY IMPORTANT (was 20)
         )
 
-        # Handle response safely
-        if hasattr(res, "points"):
-            initial_results = res.points
-        else:
-            initial_results = res
+        initial_results = res.points if hasattr(res, "points") else res
 
     except Exception as e:
         print(f"Qdrant query failed: {e}")
         return []
 
+    print(f"Initial results: {len(initial_results)}")  # 🔍 DEBUG
+
     if not initial_results:
         return []
 
-    # Extract valid chunks safely
-    valid_hits = []
-    chunks = []
+    # 🔥 FIX 2: Cleaner filtering
+    valid_hits = [
+        hit for hit in initial_results
+        if hit.payload and "text" in hit.payload
+    ]
 
-    for hit in initial_results:
-        if hit.payload and "text" in hit.payload:
-            valid_hits.append(hit)
-            chunks.append(hit.payload["text"])
+    print(f"Valid hits: {len(valid_hits)}")  # 🔍 DEBUG
 
-    if not chunks:
+    if not valid_hits:
         return []
 
-    # Prepare for reranking
+    chunks = [hit.payload["text"] for hit in valid_hits]
     pairs = [[query, chunk] for chunk in chunks]
 
     # =========================
-    # Reranking using CrossEncoder
+    # Reranking
     # =========================
     if cross_encoder is not None:
         try:
@@ -143,24 +141,27 @@ def semantic_search_with_reranking(query: str, top_k: int = 5) -> List[Dict[str,
                 for hit, score in zip(valid_hits, scores)
             ]
 
-            scored_results.sort(key=lambda x: x["score"], reverse=True)
-
-            return [res["payload"] for res in scored_results[:top_k]]
-
         except Exception as e:
-            print(f"CrossEncoder failed: {e}, using vector similarity fallback")
+            print(f"CrossEncoder failed: {e}")
+            scored_results = [
+                {"score": float(hit.score), "payload": hit.payload}
+                for hit in valid_hits if hasattr(hit, "score")
+            ]
+    else:
+        scored_results = [
+            {"score": float(hit.score), "payload": hit.payload}
+            for hit in valid_hits if hasattr(hit, "score")
+        ]
 
-    # =========================
-    # Fallback: Vector similarity
-    # =========================
-    scored_results = [
-        {"score": float(hit.score), "payload": hit.payload}
-        for hit in valid_hits if hasattr(hit, "score")
-    ]
-
+    # 🔥 FIX 3: Sort properly
     scored_results.sort(key=lambda x: x["score"], reverse=True)
 
-    return [res["payload"] for res in scored_results[:top_k]]
+    # 🔥 FIX 4: Always return top_k (max 5)
+    final_results = scored_results[:top_k]
+
+    print(f"Returned results: {len(final_results)}")  # 🔍 DEBUG
+
+    return [res["payload"] for res in final_results]
 
 
 # =========================
